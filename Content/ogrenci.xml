@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<üniversite>
+	<ogrenci>
+		<bolum>Bilgisayar Mühendisliği</bolum>
+		<ogrencino>1111</ogrencino>
+		<ad>Ahmet</ad>
+		<soyad>Veli</soyad>
+	</ogrenci>
+	<ogrenci>
+		<bolum>Makine Mühendisliği</bolum>
+		<ogrencino>2222</ogrencino>
+		<ad>Ceylan</ad>
+		<soyad>Kanmaz</soyad>
+	</ogrenci>
+	<ogrenci>
+		<bolum>Elektronik Mühendisliği</bolum>
+		<ogrencino>3333</ogrencino>
+		<ad>Cavit</ad>
+		<soyad>Aloke</soyad>
+	</ogrenci>
+</üniversite>

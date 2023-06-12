@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>DİZİ GETİR</h2>
+
+@*<p></p>*@
+<button id="j8">Dizi</button>
+<ul></ul>
+
+<h2>VERİ GETİRME</h2>
+<button id="j9">
+    veri
+</button>
+<div id="divv">
+</div>
+
+<h2>AJAX VERİ GETİRME</h2>
+<button id="j10">
+    AJAX
+</button>
+<div id="div1">
+
+</div>
+
+<div id="div2">
+    OGRENCI
+    <ul></ul>
+</div>
+
+<button id="j11">
+    JSON
+</button>
+<div>
+    <ul id="ul1"></ul>
+</div>
+
+<button id="j12">
+    JSONResult Parse
+</button>
+<div>
+    <ul id="ul2"></ul>
+</div>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script>
+    var takimlar = ["FB", "BJK", "GS", "TS", "ADS"]
+    $("#j8").click(function () {
+        $.each(takimlar, function (key, value) {
+            $("ul").append("<li>" + key + " : " + value + "</li>");
+        })
+    })
+    //each metodu HTML elemanları, diziler ve nesneler için döngü işlemi yapılmasını sağlar.
+    //HTML nesnesini seçmeden işlem yaptığımız each metodunun ilk parametresinin dizi değişken ismi olduğudur.
+    //seçerek işlem yaparsak  $("p").each(function(index, element) böyle old gibi ilk parametre func'tır.
+
+    $("#j9").click(function () {
+        $("#divv").load("/Content/ver.txt", function (response, status, x) {
+            if (status == "success")
+                alert("İÇERİK BAŞARIYLA YÜKLENDİ (Detay => " + x.status + " : " + x.statusText + ")")
+            else alert("ARIZA VAR (Detay => " + x.status + " : " + x.statusText + ")")
+        })
+    })
+
+    //AJAX
+    //Sayfadaki bileşenlerin tamamını kullanıcıya tekrar yükletmeden, sadece gerekli olan veriyi sunucuya göndermektir.
+    $("#j10").click(function () {
+        $.ajax({
+            url: "/Content/veri.txt",
+            datatype: "text",
+            //cache:false -- işlem bitince bellekte tutma
+            success: function (data) {
+                $("#div1").html(data)
+            },
+            error: function (data) {
+                alert("Dosya Okunmadı")
+            }
+        })
+    })
+
+    //internet üzerindeki yazılımların kendi aralarında web tabanlı haberleşmeleri için bir standart olarak belirlenmiştir.
+
+    $(document).ready(function () {
+        $("#div2").append("<p><b>Bölüm</b><b>Ogrenci No<b/><b>Ad<b/><b>Soyad<b/></p>");
+        $.ajax({
+            type: "Get",
+            url: "/Content/ogrenci.xml",
+            datatype: "xml",
+            success: function (xml) {
+                $(xml).find('ogrenci').each(function () {       //dosyadaki öğrenci etiketlerini bul ve her birini
+                    $("#div2").append("<p><li>" +               //divimize ekle
+                        $(this).find('bolum').text() + "</li><li>" +         //buna (ögrenci etiketine bağlı bolumu bul)
+                        $(this).find('ogrencino').text() + "</li><li>" +         //text olarak al - sonrada maddeli bi şekilde ekrana yaz
+                        $(this).find('ad').text() + "</li><li>" +
+                        $(this).find('soyad').text() + "</li></p><br/>");
+                })
+            },
+            error: function (xml) {
+                alert("Bir hata oluştu");
+            }
+
+        })
+    })
+
+    $(document).ready(function () {
+        $("#j11").click(function () {
+            $.getJSON("https://services.odata.org/v3/odata/odata.svc/Products?$format=json", function (data) {
+                $.each(data.value, function (key, item) {
+                    $("#ul1").append("<li>" + item.Name + " -- " + item.Description + "</li><br/>")
+                })
+            })
+        })
+    })
+
+    $("#j12").click(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Home/IndexJson",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (e) {
+                alert(e.ID);
+                alert(e.Description);
+                alert(e.Name);
+                alert(e.Title);
+            }
+
+        });
+    });
+</script>
